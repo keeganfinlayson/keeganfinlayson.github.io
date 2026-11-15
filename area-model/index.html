@@ -1,0 +1,354 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Area Model Studio v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#19283c;background:#f4f6fa}*{box-sizing:border-box}body{margin:0}main{max-width:1380px;margin:auto;padding:18px 24px}h1{font-size:1.6rem;margin:0}p{color:#546579}header{margin-bottom:12px}.panel{background:white;border:1px solid #dce3ec;border-radius:14px;padding:18px;margin-bottom:16px}.app-panel{padding:16px 20px 20px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}.controls{display:flex;gap:6px;align-items:center;flex:0 0 auto;border-right:2px solid #c2cfe0;padding-right:18px;margin-right:3px}label{font-size:.9rem;font-weight:750;display:grid;gap:4px}input,select,button{font:inherit;border:1px solid #b8c5d5;border-radius:8px;padding:9px 11px;background:white;color:#19283c}input{width:106px;font-size:1.25rem;font-weight:800;text-align:center;padding:7px 8px}.factor-paren{
+ font-family:"STIX Two Text",Georgia,"Times New Roman",serif;
+ font-size:3.2rem;
+ font-weight:600;
+ line-height:1;
+ color:#19283c;
+ height:56px;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ flex:0 0 auto
+}button{cursor:pointer}button:hover{border-color:#466ca5}button.active{background:#204f8a;color:white;border-color:#204f8a}.tabs{display:flex;gap:6px;flex:1 1 500px;justify-content:space-between;flex-wrap:wrap}.tabs button{flex:1 1 auto;min-width:0;font-size:.94rem;font-weight:750;padding:8px 10px}.tabs button[hidden]{display:none}.bar{font-size:1.08rem;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.muted{color:#66768a;font-size:.88rem}.math{font-size:1.5rem;font-weight:650;line-height:1.55;overflow-wrap:anywhere}.error{color:#a11d2c;min-height:1.3em}.stage{overflow:auto;min-height:360px;padding:14px 4px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}.stage>div{flex-shrink:0}.gridModel{display:grid;gap:4px;min-width:0;width:100%;max-width:1150px;margin:auto}.cell,.head{display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;min-width:55px;min-height:55px;border-radius:3px}.head{font-weight:700;font-size:1.3rem;background:#edf1f7}.cell{border:1px solid #7d9dbb;background:#d9eaf9;font-size:1.45rem;font-weight:700;position:relative;flex-direction:column;gap:8px}.cell small{color:#283e52;font-size:1.03rem;font-weight:700}
+.gridModel .head{font-size:clamp(1.5rem,2vw,2rem);font-weight:700}
+.gridModel .cell strong{font-size:clamp(1.8rem,2.7vw,2.45rem);line-height:1.15}
+.gridModel .cell small{font-size:clamp(1.15rem,1.6vw,1.4rem);font-weight:650;line-height:1.2}.tileStage{display:flex;justify-content:center;align-items:center;min-height:400px}.tileGrid{display:grid;border:2px solid #52667e;background:#fff;gap:1px;max-width:100%;overflow:auto}.tile{display:flex;align-items:center;justify-content:center;border:1px solid #597d9b;background:#b9d9f5;color:#163b62;font-weight:650;font-size:.85rem;min-width:23px;min-height:23px}.tile.x2{background:#9fc7ed}.tile.x{background:#c3e4d4;color:#174b36}.tile.unit{background:#f8e3b4;color:#6c4d15}.tile.neg{background:#f4c3c3;color:#812b2b}.tileNote{font-size:.85rem;color:#586a7d;text-align:center;margin-top:8px}.algorithm{font-family:"STIX Two Text",Georgia,"Times New Roman",serif;font-variant-numeric:lining-nums tabular-nums;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:750;line-height:1.55;display:table;margin:12px auto}.alg-line{white-space:pre;text-align:right;padding:0 14px;min-width:7ch}.alg-rule{height:0;border-top:2.5px solid #273d53;margin:3px 0}.steps{width:100%;font-size:clamp(1.05rem,1.7vw,1.5rem);font-weight:700;background:#f1f5fa;border:1px solid #cfdae9;border-radius:10px;padding:14px 18px;line-height:1.4;overflow-x:auto;white-space:nowrap;text-align:center;color:#142c4a}.steps .math{font-size:1.2rem;line-height:1.5}.examples{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.examples button{font-size:.85rem;padding:6px 9px}.pill{font-size:.78rem;font-weight:600;background:#eef3fa;padding:4px 8px;border-radius:20px}.sr{position:absolute;left:-9999px}@media(max-width:700px){main{padding:10px}.panel{padding:10px}.toolbar{align-items:center}.controls{padding-right:12px;margin-right:0}.tabs{flex:1 1 100%;justify-content:flex-start}.tabs button{font-size:.86rem;padding:7px 9px}input{width:84px}.stage{padding:8px 0;min-height:280px}.steps{text-align:left}}
+
+
+
+@media(max-width:1050px){.controls{border-right:0;border-bottom:2px solid #c2cfe0;padding-right:0;padding-bottom:10px;margin-bottom:3px}.tabs{flex-basis:100%}}
+.algebra-tile-label{font-family:"STIX Two Text",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:0;font-synthesis:none}
+.algebra-tile-expression{display:inline-flex;align-items:baseline;justify-content:center;white-space:nowrap;line-height:1.05}
+.algebra-tile-variable{font-family:"STIX Two Text",Georgia,"Times New Roman",serif;font-style:italic;font-weight:700}
+.algebra-tile-expression sup{font-size:.67em;line-height:0;position:relative;top:-.32em;font-style:normal}
+.stage,.steps,.controls input{font-family:"STIX Two Text",Georgia,"Times New Roman",serif;font-weight:700;font-variant-numeric:lining-nums tabular-nums}
+.controls input{height:43px;font-size:1.3rem;line-height:1.3;flex:0 0 auto}
+.math-variable{font-family:inherit;font-style:italic;font-weight:700}
+</style></head><body><main>
+<header><h1>Area Model Studio <span class="pill">v1.0</span></h1></header>
+<section class="panel app-panel">
+<div class="toolbar">
+<div class="controls" aria-label="Multiplication factors">
+<input id="a" value="34" aria-label="First factor" inputmode="text" spellcheck="false">
+<span class="factor-paren" aria-hidden="true">(</span>
+<input id="b" value="26" aria-label="Second factor" inputmode="text" spellcheck="false">
+<span class="factor-paren" aria-hidden="true">)</span>
+</div>
+<nav class="tabs" role="tablist" aria-label="Representation">
+<button class="active" data-mode="squares" role="tab" aria-selected="true">Squares</button>
+<button data-mode="tiles" role="tab" aria-selected="false">Algebra tiles</button>
+<button data-mode="numeric" role="tab" aria-selected="false">Table</button>
+<button data-mode="algorithm" role="tab" aria-selected="false">Algorithm</button>
+</nav></div>
+<div class="error" id="error" role="alert"></div>
+<div class="stage" id="stage"></div>
+<div class="steps" id="steps"></div>
+</section></main>
+<script>
+// Option A: amber/blue columns and coral/sage rows. Further colors extend the pattern for three or four partitions.
+const MODEL_PALETTE={
+ cols:[[240,174,60],[95,148,230],[166,125,205],[81,173,175]],
+ rows:[[226,109,146],[101,190,150],[136,151,203],[208,165,111]]
+};
+const toneInk=(kind,index)=>'rgb('+MODEL_PALETTE[kind][index%MODEL_PALETTE[kind].length].map(v=>Math.round(v*.58)).join(',')+')';
+const toOKLab=(rgb)=>{
+ const [r,g,b]=rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));
+ const l=Math.cbrt(.4122214708*r+.5363325363*g+.0514459929*b);
+ const m=Math.cbrt(.2119034982*r+.6806995451*g+.1073969566*b);
+ const n=Math.cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
+ return [.2104542553*l+.793617785*m-.0040720468*n,1.9779984951*l-2.428592205*m+.4505937099*n,.0259040371*l+.7827717662*m-.808675766*n];
+};
+const fromOKLab=(L,a,b)=>{
+ const l=Math.pow(L+.3963377774*a+.2158037573*b,3),m=Math.pow(L-.1055613458*a-.0638541728*b,3),n=Math.pow(L-.0894841775*a-1.291485548*b,3);
+ return [4.0767416621*l-3.3077115913*m+.2309699292*n,-1.2684380046*l+2.6097574011*m-.3413193965*n,-.0041960863*l-.7034186147*m+1.707614701*n]
+ .map(v=>{v=Math.max(0,v);return Math.max(0,Math.min(255,Math.round(255*(v<=.0031308?12.92*v:1.055*Math.pow(v,1/2.4)-.055))))});
+};
+const tone=(kind,index)=>'rgb('+MODEL_PALETTE[kind][index%MODEL_PALETTE[kind].length].join(',')+')';
+const toneSoft=(kind,index)=>'rgb('+MODEL_PALETTE[kind][index%MODEL_PALETTE[kind].length].map(v=>Math.round(v*.43+255*.57)).join(',')+')';
+const mixedTone=(ri,ci)=>{
+ const a=toOKLab(MODEL_PALETTE.rows[ri%MODEL_PALETTE.rows.length]),b=toOKLab(MODEL_PALETTE.cols[ci%MODEL_PALETTE.cols.length]);
+ // Equal perceived lightness; moderate chroma for legible grid lines and navy text.
+ return 'rgb('+fromOKLab(.86,(a[1]+b[1])*.275,(a[2]+b[2])*.275).join(',')+')';
+};
+function drawDimensionArrows(svg,ns,origin,unit,top,left){
+ const make=(tag,attrs)=>{const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));svg.appendChild(e);return e};
+ const arrow=(x1,y1,x2,y2)=>{
+  const horiz=y1===y2,head=9,half=4;
+  make('line',{x1,y1,x2,y2,stroke:'#33485d','stroke-width':2.1});
+  if(horiz){
+   make('path',{d:'M'+(x1+head)+' '+(y1-half)+'L'+x1+' '+y1+'L'+(x1+head)+' '+(y1+half),fill:'none',stroke:'#33485d','stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'});
+   make('path',{d:'M'+(x2-head)+' '+(y2-half)+'L'+x2+' '+y2+'L'+(x2-head)+' '+(y2+half),fill:'none',stroke:'#33485d','stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'});
+  }else{
+   make('path',{d:'M'+(x1-half)+' '+(y1+head)+'L'+x1+' '+y1+'L'+(x1+half)+' '+(y1+head),fill:'none',stroke:'#33485d','stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'});
+   make('path',{d:'M'+(x2-half)+' '+(y2-head)+'L'+x2+' '+y2+'L'+(x2+half)+' '+(y2-head),fill:'none',stroke:'#33485d','stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'});
+  }
+ };
+ const label=(x,y,value,color,size=27)=>{
+  const e=make('text',{x,y,'text-anchor':'middle','dominant-baseline':'central','font-size':size,'font-weight':700,fill:color});
+  e.textContent=textTerm(value);
+ };
+ let x=origin;
+ top.forEach((part,ci)=>{
+  const len=part.c*unit;
+  if(part.c!==1&&len>=42)arrow(x+3,origin-18,x+len-3,origin-18);
+  label(x+len/2,origin-49,part,toneInk('cols',ci),Math.min(27,Math.max(21,len/2)));
+  x+=len;
+ });
+ let y=origin;
+ left.forEach((part,ri)=>{
+  const len=part.c*unit;
+  if(part.c!==1&&len>=42)arrow(origin-18,y+3,origin-18,y+len-3);
+  label(origin-54,y+len/2,part,toneInk('rows',ri),Math.min(30,Math.max(23,len/2)));
+  y+=len;
+ });
+}
+const $=id=>document.getElementById(id);let mode='squares',current=null;
+const fmt=n=>String(n).replace(/^-/, '−');const signTerm=(c,p,first)=>{if(!c)return '';let s=c<0?'−':first?'':'+';let a=Math.abs(c);return s+(p?(a===1?'':a)+(p===2?'x²':'x'):a)};
+function polyText(p){let out='';for(let i=2;i>=0;i--)if(p[i])out+=signTerm(p[i],i,!out);return out||'0'}
+function parse(raw){let s=raw.replace(/\s/g,'').replace(/−/g,'-').replace(/\*/g,'').replace(/\(/g,'').replace(/\)/g,'');if(!s||!/^[+\-\dxX]+$/.test(s))throw Error('Use numbers and x, such as 34, 2x+3, or x−5.');s=s.replace(/X/g,'x').replace(/x/g,'x');if(!/^[+-]/.test(s))s='+'+s;let parts=s.match(/[+-][^+-]+/g)||[];let out=[0,0,0];for(let t of parts){let sign=t[0]==='-'?-1:1,v=t.slice(1);if(/^\d+$/.test(v))out[0]+=sign*Number(v);else if(/^(\d*)x$/.test(v))out[1]+=sign*Number(v.slice(0,-1)||1);else throw Error('Each factor can contain constants and x terms (no powers yet).')}if(!Number.isSafeInteger(out[0])||!Number.isSafeInteger(out[1]))throw Error('Number is too large.');return out}
+function parts(p){if(p[1]){let a=[];if(p[1])a.push({c:p[1],pow:1});if(p[0])a.push({c:p[0],pow:0});return a}let n=p[0],sg=Math.sign(n)||1,abs=Math.abs(n);if(abs===0)return [{c:0,pow:0}];let digs=String(abs).split('').map((v,i)=>Number(v)*10**(String(abs).length-i-1)).filter(Boolean);return digs.map(c=>({c:c*sg,pow:0}))}
+function textTerm(t){return polyText([t.pow===0?t.c:0,t.pow===1?t.c:0,t.pow===2?t.c:0])}
+function product(a,b){return {c:a.c*b.c,pow:a.pow+b.pow}}
+function result(p,q){return [p[0]*q[0],p[0]*q[1]+p[1]*q[0],p[1]*q[1]]}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function cell(t){return safe(textTerm(t))}
+function setMathText(node,value){node.innerHTML=safe(value).replace(/x/g,'<span class="math-variable">x</span>')}
+function render(){
+ if(!current)return;
+ const {p,q,top,left,r}=current,hide=false;
+ $('stage').innerHTML='';
+ if(mode==='numeric')drawNumeric(top,left,hide);
+ if(mode==='squares')drawSquares(top,left,hide);
+ if(mode==='tiles')drawTiles(top,left,hide);
+ if(mode==='algorithm')drawAlgorithm(p,q,top,left,hide);
+ const terms=left.flatMap(l=>top.map(t=>product(l,t)));
+ const formatSum=items=>items.join(' + ').replace(/\+ −/g,'− ');
+ const expression='('+polyText(p)+')('+polyText(q)+') = '+formatSum(left.flatMap(l=>top.map(t=>textTerm(l)+'('+textTerm(t)+')')))+' = '+formatSum(terms.map(textTerm))+' = '+polyText(r);
+ $('steps').innerHTML=safe(expression).replace(/x/g,'<span class="math-variable">x</span>');
+}
+function drawNumeric(top,left,hide){
+ const stage=$('stage'),grid=document.createElement('div');grid.className='gridModel';
+ // Use a compact, centered near-square table for multiple rows; keep a single row short and rectangular.
+ // Allow long expressions to widen cells when needed, with scrolling as a last resort.
+ const cols=top.length,rows=left.length;
+ const longest=Math.max(...top.flatMap(t=>left.map(l=>'('+textTerm(l)+')('+textTerm(t)+')')).map(v=>v.length),5);
+ const minCellWidth=Math.max(150,Math.min(340,Math.ceil(longest*15+32)));
+ const headerWidth=72,headerHeight=64;
+ const stageWidth=Math.max(300,(stage.clientWidth||1100)-24);
+ const targetWidth=Math.max(headerWidth+cols*minCellWidth,Math.min(rows===1&&cols===1?390:630,stageWidth));
+ const targetHeight=rows===1?headerHeight+150:Math.max(headerHeight+rows*112,Math.min(590,targetWidth*.91));
+ const cellWidth=Math.max(minCellWidth,Math.round((targetWidth-headerWidth-4*cols)/cols));
+ const cellHeight=rows===1?150:Math.max(112,Math.round((targetHeight-headerHeight-4*rows)/rows));
+ grid.style.width='max-content';
+ grid.style.maxWidth='none';
+ grid.style.minWidth='0';
+ grid.style.gridTemplateColumns=headerWidth+'px '+top.map(()=>cellWidth+'px').join(' ');
+ grid.style.gridTemplateRows=headerHeight+'px '+left.map(()=>cellHeight+'px').join(' ');
+ const add=(cls,txt,sub,bg)=>{
+   const d=document.createElement('div');d.className=cls;
+   if(bg)d.style.backgroundColor=bg;
+   if(cls==='cell'){const strong=document.createElement('strong');setMathText(strong,txt);d.appendChild(strong);
+     if(sub){const small=document.createElement('small');setMathText(small,sub);d.appendChild(small)}}
+   else setMathText(d,txt);
+   grid.appendChild(d);
+ };
+ add('head','·',null,'#e9edf1');top.forEach((t,ci)=>add('head',textTerm(t),null,tone('cols',ci)));
+ left.forEach((l,ri)=>{add('head',textTerm(l),null,tone('rows',ri));top.forEach((t,ci)=>add('cell',hide?'?':textTerm(product(l,t)),'('+textTerm(l)+')('+textTerm(t)+')',mixedTone(ri,ci)))});
+ const wrap=document.createElement('div');wrap.style.cssText='max-width:100%;overflow:auto;margin:0 auto';wrap.appendChild(grid);stage.appendChild(wrap);
+}
+function drawSquares(top,left,hide){
+ const numeric=top.every(t=>t.pow===0&&t.c>=0)&&left.every(t=>t.pow===0&&t.c>=0);
+ if(!numeric){drawNumeric(top,left,hide);return}
+ const w=top.reduce((s,t)=>s+t.c,0),h=left.reduce((s,t)=>s+t.c,0);
+ if(!w||!h){$('stage').textContent='Zero area: '+w+' × '+h+' = 0';return}
+ const origin=78,stage=$('stage'),available=Math.max(260,Math.min(1240,(stage.clientWidth||1200)-28));
+ const viewportH=Number.isFinite(window.innerHeight)?window.innerHeight:900;
+ const stageTop=stage.getBoundingClientRect?Math.max(140,stage.getBoundingClientRect().top):180;
+ const steps=$('steps'),stepsHeight=steps.getBoundingClientRect?Math.max(74,steps.getBoundingClientRect().height):84;
+ // Reserve room for the equation and panel margins; shrink the unit grid to fit the visible screen.
+ const availableH=Math.max(230,Math.min(760,viewportH-stageTop-stepsHeight-44));
+ const unit=Math.max(2.5,Math.min(180,(available-origin-12)/w,(availableH-origin-8)/h)),ns='http://www.w3.org/2000/svg';
+ const svg=document.createElementNS(ns,'svg');svg.setAttribute('width',w*unit+origin+3);svg.setAttribute('height',h*unit+origin+3);
+ svg.setAttribute('viewBox','0 0 '+(w*unit+origin+3)+' '+(h*unit+origin+3));svg.style.cssText='display:block;margin:auto;max-width:none';
+ const add=(tag,attrs)=>{let e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));svg.appendChild(e);return e};
+ let y=origin;
+ left.forEach((row,ri)=>{let x=origin;top.forEach((col,ci)=>{
+  const ww=col.c*unit,hh=row.c*unit;
+  add('rect',{x,y,width:ww,height:hh,fill:mixedTone(ri,ci)});
+  if(unit>=2.5 && col.c<=140 && row.c<=140){const d=[];for(let j=1;j<col.c;j++)d.push('M'+(x+j*unit)+' '+y+'v'+hh);for(let j=1;j<row.c;j++)d.push('M'+x+' '+(y+j*unit)+'h'+ww);add('path',{d:d.join(' '),fill:'none',stroke:'#96acb9','stroke-width':Math.min(.65,unit*.17)})}
+  add('rect',{x,y,width:ww,height:hh,fill:'none',stroke:'#344d66','stroke-width':2.2});
+  if(ww>=34&&hh>=28){const t=add('text',{x:x+ww/2,y:y+hh/2,'dominant-baseline':'central','text-anchor':'middle',fill:'#263b50','font-size':Math.max(18,Math.min(34,Math.min(ww/2.5,hh/2.5))),'font-weight':700});t.textContent=hide?'?':String(row.c*col.c)}
+  x+=ww;
+ });y+=row.c*unit});
+ drawDimensionArrows(svg,ns,origin,unit,top,left);
+ const wrap=document.createElement('div');wrap.style.cssText='overflow:auto;max-width:100%';wrap.appendChild(svg);$('stage').appendChild(wrap);
+ 
+}
+function drawTiles(top,left,hide){
+ const stage=$('stage');const p=current.p,q=current.q;
+ if(!p[1]&&!q[1]&&p[0]>=0&&q[0]>=0){
+  const bands=n=>{let a=[];for(let i=0;i<Math.floor(n/10);i++)a.push(10);for(let i=0;i<n%10;i++)a.push(1);return a};
+  const cols=bands(q[0]),rows=bands(p[0]);
+  if(!cols.length||!rows.length){stage.textContent='Zero area';return}
+  if(cols.length*rows.length>1800){drawNumeric(top,left,false);return}
+  const viewportH=Number.isFinite(window.innerHeight)?window.innerHeight:900;
+  const availableW=Math.max(280,(stage.clientWidth||1100)-24);
+  const availableH=Math.min(760,Math.max(400,viewportH*.74));
+  // Scale all tiles together so a square always has equal side lengths.
+  // Stop shrinking at 10px per unit; scroll rather than make tiles illegible.
+  const u=Math.max(10,Math.min(30,Math.floor(availableW/(q[0]+1)),Math.floor(availableH/(p[0]+1))));
+  const edge=u,sep=4;
+  const root=document.createElement('div');root.style.cssText='display:grid;gap:3px;width:max-content;margin:0 auto;align-items:stretch';
+  root.style.gridTemplateColumns=edge+'px '+sep+'px '+cols.map(c=>c*u+'px').join(' ');
+  root.style.gridTemplateRows=edge+'px '+sep+'px '+rows.map(r=>r*u+'px').join(' ');
+  const colors={hundred:'#a9cbed',ten:'#c4e2d7',one:'#f5d99c'};
+  const place=(e,row,col,rowSpan=1,colSpan=1)=>{e.style.gridRow=row+' / span '+rowSpan;e.style.gridColumn=col+' / span '+colSpan;root.appendChild(e)};
+  const cell=(label,bg,vertical=false)=>{const e=document.createElement('div');e.style.cssText='display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:1.5px solid #24394e;border-radius:min(5px, 24%);background:'+bg+';color:#243b51;font-weight:700;font-size:clamp(13px,1.4vw,21px);overflow:hidden;min-width:0;min-height:0';e.className='algebra-tile-label';e.title=label;e.setAttribute('aria-label',label);if(vertical){const span=document.createElement('span');span.textContent=label;span.style.cssText='display:inline-block;white-space:nowrap;transform:rotate(-90deg);transform-origin:center';e.appendChild(span)}else e.textContent=label;return e};
+  const corner=document.createElement('div');corner.textContent='·';corner.style.cssText='display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;position:relative';place(corner,1,1);const cornerH=document.createElement('div');cornerH.style.cssText='background:#24394e;margin-right:-3px';place(cornerH,2,1);const cornerV=document.createElement('div');cornerV.style.cssText='background:#24394e;margin-bottom:-3px';place(cornerV,1,2);
+  const hLine=document.createElement('div');hLine.style.background='#24394e';place(hLine,2,2,1,cols.length+1);
+  const vLine=document.createElement('div');vLine.style.background='#24394e';place(vLine,2,2,rows.length+1,1);
+  cols.forEach((c,j)=>place(cell(String(c),c===10?colors.ten:colors.one),1,j+3));
+  rows.forEach((r,i)=>{const edgeTile=cell(String(r),r===10?colors.ten:colors.one,r===10);place(edgeTile,i+3,1);cols.forEach((c,j)=>place(cell(String(c*r),c===10&&r===10?colors.hundred:c===10||r===10?colors.ten:colors.one,r===10&&c===1),i+3,j+3))});
+  const wrap=document.createElement('div');wrap.style.cssText='overflow:auto;padding:8px';wrap.appendChild(root);stage.appendChild(wrap);
+  return;
+ }
+
+ const factorTiles=(v)=>{let arr=[];if(v[1])for(let i=0;i<Math.abs(v[1]);i++)arr.push({pow:1,sign:Math.sign(v[1])});if(v[0])for(let i=0;i<Math.abs(v[0]);i++)arr.push({pow:0,sign:Math.sign(v[0])});return arr};
+ const rows=factorTiles(p),cols=factorTiles(q);
+ if(!rows.length||!cols.length){stage.textContent='Zero factor: no tiles occupy the area.';return}
+ if(!reasonableAlgebraTiles(p,q)){drawNumeric(top,left,false);return}
+ const viewportH=Number.isFinite(window.innerHeight)?window.innerHeight:900;
+ const availableW=Math.max(280,(stage.clientWidth||1100)-24);
+ const availableH=Math.min(760,Math.max(400,viewportH*.74));
+ const colUnits=cols.reduce((n,t)=>n+(t.pow?4.5:1),0),rowUnits=rows.reduce((n,t)=>n+(t.pow?4.5:1),0);
+ const unit=Math.max(16,Math.min(38,Math.floor(availableW/(colUnits+1.5)),Math.floor(availableH/(rowUnits+1.5))));
+ const xLength=Math.round(unit*4.5),label=unit,sep=4;
+ const widths=cols.map(t=>t.pow?xLength:unit),heights=rows.map(t=>t.pow?xLength:unit);
+ const wrap=document.createElement('div');wrap.style.cssText='width:100%;overflow:auto;padding:8px 0 12px';
+ const root=document.createElement('div');root.style.cssText='display:grid;gap:3px;width:max-content;margin:0 auto;align-items:stretch';
+ root.style.gridTemplateColumns=label+'px '+sep+'px '+widths.map(w=>w+'px').join(' ');
+ root.style.gridTemplateRows=label+'px '+sep+'px '+heights.map(h=>h+'px').join(' ');
+ const colors={square:'#a9cbed',variable:'#c3e4d4',unit:'#f6e3b5',negative:'#f4c3c3'};
+ const place=(e,row,col,rowSpan=1,colSpan=1)=>{e.style.gridRow=row+' / span '+rowSpan;e.style.gridColumn=col+' / span '+colSpan;root.appendChild(e)};
+ const add=(t,vertical=false)=>{const d=document.createElement('div');const color=t.sign<0?colors.negative:t.pow===2?colors.square:t.pow===1?colors.variable:colors.unit;d.style.cssText='display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:1.5px solid #24394e;border-radius:min(5px, 24%);background:'+color+';color:#243b51;font-weight:700;font-size:clamp(13px,1.4vw,21px);min-width:0;min-height:0';const txt=(t.sign<0?'−':'')+(t.pow===2?'x²':t.pow===1?'x':'1');
+ d.className='algebra-tile-label';
+ d.setAttribute('aria-label',txt);
+ const span=document.createElement('span');
+ span.className='algebra-tile-expression';
+ if(t.sign<0){const sign=document.createElement('span');sign.textContent='−';span.appendChild(sign)}
+ if(t.pow>0){
+  const x=document.createElement('span');x.className='algebra-tile-variable';x.textContent='x';span.appendChild(x);
+  if(t.pow===2){const sup=document.createElement('sup');sup.textContent='2';span.appendChild(sup)}
+ }else{const one=document.createElement('span');one.textContent='1';span.appendChild(one)}
+ if(vertical)span.style.cssText='transform:rotate(-90deg);transform-origin:center;font-size:'+Math.min(21,Math.max(12,Math.floor(unit*.72)))+'px';
+ d.appendChild(span);return d};
+ const corner=document.createElement('div');corner.textContent='·';corner.style.cssText='display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;position:relative';place(corner,1,1);const cornerH=document.createElement('div');cornerH.style.cssText='background:#24394e;margin-right:-3px';place(cornerH,2,1);const cornerV=document.createElement('div');cornerV.style.cssText='background:#24394e;margin-bottom:-3px';place(cornerV,1,2);
+ const hLine=document.createElement('div');hLine.style.background='#24394e';place(hLine,2,2,1,cols.length+1);
+ const vLine=document.createElement('div');vLine.style.background='#24394e';place(vLine,2,2,rows.length+1,1);
+ cols.forEach((c,j)=>place(add(c),1,j+3));
+ rows.forEach((r,i)=>{place(add(r,r.pow===1),i+3,1);cols.forEach((c,j)=>place(add({pow:r.pow+c.pow,sign:r.sign*c.sign},r.pow===1&&c.pow===0),i+3,j+3))});
+ wrap.appendChild(root);stage.appendChild(wrap);
+
+}
+function drawAlgorithm(p,q,top,left,hide){
+ const d=document.createElement('div');d.className='algorithm';d.setAttribute('aria-label','Standard multiplication algorithm');
+ const add=(value,bg,bold)=>{const line=document.createElement('div');line.className='alg-line';setMathText(line,value);if(bg)line.style.backgroundColor=bg;if(bold)line.style.fontWeight='700';d.appendChild(line)};
+ const rule=()=>{const line=document.createElement('div');line.className='alg-rule';d.appendChild(line)};
+ const factorLine=(value,groups,axis,prefix)=>{
+  const line=document.createElement('div');line.className='alg-line';line.style.fontWeight='700';
+  if(prefix){line.appendChild(document.createTextNode(prefix))}
+  const digits=String(value),raw=digits.replace('-','');let position=0;
+  for(const character of digits){
+    const span=document.createElement('span');span.textContent=character;
+    if(/[0-9]/.test(character)){
+      const exp=raw.length-1-position;
+      const amount=Number(character)*10**exp;
+      const idx=groups.findIndex(t=>t.pow===0&&Math.abs(t.c)===amount);
+      span.style.color=idx>=0?toneInk(axis,idx):'#52667c';
+      position++;
+    }
+    line.appendChild(span);
+  }
+  d.appendChild(line);
+ };
+ if(!p[1]&&!q[1]&&Number.isInteger(p[0])&&Number.isInteger(q[0])){
+  const a=p[0],b=q[0],digits=String(Math.abs(b)).split('').reverse();
+  factorLine(a,left,'rows','');factorLine(b,top,'cols','× ');rule();
+  if(digits.length>1){
+    digits.forEach((digit,i)=>{
+      const part=Number(digit)*a*10**i*(b<0?-1:1);
+      const idx=top.findIndex(t=>t.pow===0&&Math.abs(t.c)===Number(digit)*10**i);
+      add(hide?'?':String(part),idx>=0?toneSoft('cols',idx):null,false);
+    });
+    rule();
+  }
+  add(hide?'?':String(a*b),null,true);
+ }else{
+  add('('+polyText(p)+')');add('× ('+polyText(q)+')');rule();
+  const parts=[];
+  if(q[0])parts.push({value:polyText([p[0]*q[0],p[1]*q[0],0]),index:top.findIndex(t=>t.pow===0)});
+  if(q[1])parts.push({value:polyText([0,p[0]*q[1],p[1]*q[1]]),index:top.findIndex(t=>t.pow===1)});
+  if(parts.length>1){parts.forEach(t=>add(hide?'?':t.value,t.index>=0?toneSoft('cols',t.index):null));rule()}
+  add(hide?'?':polyText(result(p,q)),null,true);
+ }
+ $('stage').appendChild(d);
+}
+// Count every physical piece, including the two outside edges.
+// Keep algebra tiles limited to layouts students can actually distinguish.
+function reasonableAlgebraTiles(p,q){
+ const edgeCount=v=>Math.abs(v[0])+Math.abs(v[1]);
+ const edgeUnits=v=>Math.abs(v[0])+4.5*Math.abs(v[1]);
+ const rows=edgeCount(p),cols=edgeCount(q);
+ const total=rows*cols+rows+cols;
+ return rows>0&&cols>0&&rows<=12&&cols<=12&&total<=100&&
+        edgeUnits(p)<=36&&edgeUnits(q)<=36;
+}
+function syncModes(hasX,p,q){
+ const allowSquares=!hasX&&p[0]>=0&&q[0]>=0&&p[0]<=99&&q[0]<=99&&p[0]*q[0]<1000;
+ const allowTiles=hasX&&reasonableAlgebraTiles(p,q);
+ document.querySelectorAll('[data-mode]').forEach(btn=>{
+  const unavailable=(btn.dataset.mode==='squares'&&!allowSquares)||
+                    (btn.dataset.mode==='tiles'&&!allowTiles);
+  btn.hidden=unavailable;
+  btn.disabled=unavailable;
+ });
+ if(mode==='squares'&&!allowSquares)mode=allowTiles?'tiles':'numeric';
+ if(mode==='tiles'&&!allowTiles)mode=allowSquares?'squares':'numeric';
+ document.querySelectorAll('[data-mode]').forEach(btn=>{
+  const selected=btn.dataset.mode===mode;
+  btn.classList.toggle('active',selected);
+  btn.setAttribute('aria-selected',String(selected));
+ });
+}
+function build(){
+ try{
+  const p=parse($('a').value),q=parse($('b').value);
+  if(Math.max(Math.abs(p[0]),Math.abs(q[0]))>99999||Math.max(Math.abs(p[1]),Math.abs(q[1]))>999)throw Error('For readability, use constants up to 99,999 and x coefficients up to 999.');
+  current={p,q,top:parts(q),left:parts(p),r:result(p,q)};
+  $('error').textContent='';
+  const hasX=p[1]!==0||q[1]!==0;
+  syncModes(hasX,p,q);
+  render();
+ }catch(e){$('error').textContent=e.message}
+}
+document.querySelectorAll('[data-mode]').forEach(btn=>btn.onclick=()=>{
+ if(btn.hidden||btn.disabled)return;
+ mode=btn.dataset.mode;
+ document.querySelectorAll('[data-mode]').forEach(b=>{
+  b.classList.toggle('active',b===btn);
+  b.setAttribute('aria-selected',String(b===btn));
+ });
+ render();
+});
+['a','b'].forEach(id=>{
+ $(id).addEventListener('input',()=>{clearTimeout(window._update);window._update=setTimeout(build,220)});
+ $(id).addEventListener('keydown',e=>{if(e.key==='Enter')build()});
+});
+build();
+if(window.addEventListener)window.addEventListener('resize',()=>{if(current&&(mode==='tiles'||mode==='squares'))render()});
+</script></body></html>
