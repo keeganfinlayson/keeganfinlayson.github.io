@@ -40,7 +40,7 @@ const recentEntries=[...document.querySelectorAll('.card[data-href]')].map(card=
  name:card.querySelector('h2')?.textContent?.trim(),
  url:card.dataset.href,
  updated:card.querySelector('.updated-date')?.dataset.updated
-})).filter(item=>item.name&&item.updated&&Number.isFinite(Date.parse(item.updated))&&Date.now()-Date.parse(item.updated)>=0&&Date.now()-Date.parse(item.updated)<=7*24*60*60*1000).sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||a.name.localeCompare(b.name));
+})).filter(item=>item.name&&item.updated&&Number.isFinite(Date.parse(item.updated))&&Date.now()-Date.parse(item.updated)>=0&&Date.now()-Date.parse(item.updated)<=3*24*60*60*1000).sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||a.name.localeCompare(b.name));
 if(!recentEntries.length){const span=document.createElement('span');span.className='recent-empty';span.textContent='No app updates in the past week.';recentContainer.append(span)}
 else recentEntries.forEach((item,i)=>{const a=document.createElement('a');a.href=item.url;a.textContent=item.name;a.title='Updated '+new Date(item.updated).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});recentContainer.append(a)});
 
